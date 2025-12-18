@@ -16,19 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // 2. Obter e validar 'percentual' e 'matriz'
 $percentual = isset($_POST['percentual']) ? (float)$_POST['percentual'] : 0;
-$matrizJson = $_POST['matriz'] ?? null;
+$matrizJson = isset($_POST['matriz']) ? $_POST['matriz'] : null;
 
-$matriz = !empty($matrizJson) ? json_decode($matrizJson, true) : null;
-
-if (json_last_error() !== JSON_ERROR_NONE) {
+// Validação mais estrita dos parâmetros de entrada
+if ($percentual === null || $matrizJson === null) {
     http_response_code(400);
-    echo json_encode(['erro' => 'O formato da matriz JSON é inválido.']);
+    echo json_encode(['erro' => 'Parâmetros obrigatórios ausentes. Forneça "percentual" e "matriz".']);
     exit;
 }
 
-if (empty($matriz)) {
-    http_response_code(400); // Bad Request
-    echo json_encode(['erro' => 'Dados inválidos. A "matriz" de imóveis não pode estar vazia.']);
+if ($percentual <= 0) {
+    http_response_code(400);
+    echo json_encode(['erro' => 'O "percentual" de reajuste deve ser um valor positivo.']);
     exit;
 }
 
@@ -39,18 +38,24 @@ if (empty($matriz)) {
  * Esta é a closure. Ela é uma função anônima atribuída a uma variável.
  * Ela recebe um imóvel por vez e aplica a regra de negócio.
  */
-$reajustaImovel = function (array $imovel) use ($percentual): array {
+$matriz = json_decode($matrizJson, true);
+
+if (json_last_error() !== JSON_ERROR_NONE || !is_array($matriz)) {
+    http_response_code(400);
+    echo json_encode(['erro' => 'O formato da "matriz" JSON é inválido ou não é um array.']);
+    exit;
+}
+
+$reajustaImovel = function ($imovel) use ($percentual): array {
     // Validação: Garante que as chaves essenciais existem no array do imóvel.
-    if (!isset($imovel['preco'], $imovel['disponibilidade'])) {
+    if (!is_array($imovel) || !isset($imovel['preco'], $imovel['disponibilidade'])) {
         return $imovel + ['erro' => 'Dados do imóvel incompletos'];
     }
     // Primeiro, sempre guardamos o preço antigo.
     $imovel['preco_antigo'] = $imovel['preco'];
 
-    // CONDIÇÕES PARA O AUMENTO (ambas devem ser verdadeiras)
-    // 1. O percentual de reajuste é positivo?
-    // 2. O imóvel está disponível?
-    if ($percentual > 0 && $imovel['disponibilidade'] === 'DISPONIVEL') {
+    // A condição principal: o imóvel está disponível? (o percentual já foi validado)
+    if ($imovel['disponibilidade'] === 'DISPONIVEL') {
         // Se AMBAS as condições forem atendidas, calculamos o novo preço...
         $novoPreco = $imovel['preco'] * (1 + $percentual / 100);
         // ...e adicionamos o campo 'preco_novo' ao array do imóvel.

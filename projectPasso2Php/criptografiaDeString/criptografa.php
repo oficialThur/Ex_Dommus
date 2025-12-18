@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json');
+
 // 3. Usar openssl_encrypt para criptografar o texto (o algoritmo pode ser definido como constante).
 define('ENCRYPTION_METHOD', 'AES-256-CBC');
 
@@ -14,7 +16,8 @@ $textoParaCriptografar = $_GET['texto'] ?? null;
 // 2. Validar se o valor foi informado.
 if (empty($textoParaCriptografar)) {
     http_response_code(400);
-    die("Erro: O parâmetro 'texto' é obrigatório e não foi informado.");
+    echo json_encode(['erro' => "O parâmetro 'texto' é obrigatório e não foi informado."]);
+    exit;
 }
 
 // 3. Criptografar o texto.
@@ -26,10 +29,19 @@ $textoCriptografado = openssl_encrypt(
     $iv
 );
 
-// 5. Armazenar o texto criptografado em um cookie chamado texto_criptografado.
-setcookie('texto_criptografado', $textoCriptografado, time() + 3600, "/");
+if ($textoCriptografado === false) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Falha ao criptografar os dados.']);
+    exit;
+}
 
-// 6. Retornar para o usuário uma mensagem informando que o cookie foi definido.
-echo "Cookie 'texto_criptografado' definido com sucesso!";
+// 5. Armazenar o texto criptografado em um cookie chamado texto_criptografado.
+// É uma boa prática codificar o resultado em Base64 para garantir que ele seja seguro para cookies/URLs.
+$textoCriptografadoBase64 = base64_encode($textoCriptografado);
+
+setcookie('texto_criptografado', $textoCriptografadoBase64, time() + 3600, "/");
+
+// 6. Retornar para o usuário uma resposta JSON de sucesso.
+echo json_encode(['sucesso' => "Cookie 'texto_criptografado' definido com sucesso!"]);
 
 ?>

@@ -56,14 +56,12 @@ $apiResponse = curl_exec($ch);
 
 if ($apiResponse === false) {
     $curlError = curl_error($ch); 
-    curl_close($ch); 
     http_response_code(500); 
     echo json_encode(['error' => 'Falha na comunicação com a API externa.', 'curl_error' => $curlError]);
     exit;
 }
 $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-curl_close($ch);
 
 header('Content-Type: application/json');
 http_response_code(200); 
