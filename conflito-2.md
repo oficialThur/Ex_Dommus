@@ -1,5 +1,0 @@
-artur
-qwewqe
-ewqewq
-ewqeqew
-................

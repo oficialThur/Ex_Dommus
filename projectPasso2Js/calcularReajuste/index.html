@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Exercício - Reajuste de Imóveis</title>
+    <link rel="stylesheet" href="styles/index.css">
+</head>
+
+<body>
+
+    <h1>Reajuste de Preços — Exercício</h1>
+
+    <p>Insira um percentual (ex.: 8 para 8%) e clique em <strong>Calcular</strong>.</p>
+
+    <div class="controls">
+        <label for="reajuste">Reajuste (%)</label>
+        <input id="reajuste" type="number" placeholder="Reajuste" step="0.01" />
+        <button id="btnCalcular" type="button">Calcular</button>
+    </div>
+
+    <table id="tabelaImoveis" aria-describedby="tabelaDescricao">
+        <caption id="tabelaDescricao">Lista de Imóveis</caption>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrição</th>
+                <th>Preço (R$)</th>
+                <th>Disponibilidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Exemplo de linhas; o estagiário deve iterar estas linhas -->
+            <tr>
+                <td class="col-id">1</td>
+                <td class="col-descricao">Apartamento 80m² - Centro</td>
+                <td class="col-preco">350000.00</td>
+                <td class="col-disponibilidade">DISPONIVEL</td>
+            </tr>
+            <tr>
+                <td class="col-id">2</td>
+                <td class="col-descricao">Casa 120m² - Bairro Verde</td>
+                <td class="col-preco">480000.00</td>
+                <td class="col-disponibilidade">DISPONIVEL</td>
+            </tr>
+            <tr>
+                <td class="col-id">3</td>
+                <td class="col-descricao">Kitnet 30m² - Próx. à Universidade</td>
+                <td class="col-preco">150000.00</td>
+                <td class="col-disponibilidade">DISPONIVEL</td>
+            </tr>
+            <tr>
+                <td class="col-id">4</td>
+                <td class="col-descricao">Cobertura 200m² - Vista Mar</td>
+                <td class="col-preco">1200000.00</td>
+                <td class="col-disponibilidade">DISPONIVEL</td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="scripts/calcular-reajuste.js"></script>
+</body>
+
+</html>
