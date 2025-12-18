@@ -1,5 +1,6 @@
 <?php
 
+header('Content-Type: application/json');
 $id = $_GET['id'];
 
 if($_SERVER['REQUEST_METHOD'] !== 'PUT'){
@@ -36,6 +37,13 @@ $jsonPayload = json_encode($postData);
 // Usar a extensão cURL para enviar o PUT
 $url = "https://jsonplaceholder.typicode.com/posts/{$id}";
 
+// Verifica se a extensão cURL está habilitada antes de tentar usá-la
+if (!function_exists('curl_init')) {
+    http_response_code(500);
+    echo json_encode(['error' => 'A extensão cURL não está instalada ou habilitada no servidor PHP.']);
+    exit;
+}
+
 $ch = curl_init($url);
 
 if ($ch === false) {
@@ -63,7 +71,6 @@ if ($apiResponse === false) {
 $httpStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 
-header('Content-Type: application/json');
 http_response_code(200); 
 
 echo json_encode([

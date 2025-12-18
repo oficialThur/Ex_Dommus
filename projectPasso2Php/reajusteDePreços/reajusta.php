@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // 2. Obter e validar 'percentual' e 'matriz'
-$percentual = isset($_POST['percentual']) ? (float)$_POST['percentual'] : 0;
+$percentual = isset($_POST['percentual']) ? (float)$_POST['percentual'] : null;
 $matrizJson = isset($_POST['matriz']) ? $_POST['matriz'] : null;
 
 // Validação mais estrita dos parâmetros de entrada
