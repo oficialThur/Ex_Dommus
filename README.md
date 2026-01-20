@@ -1,45 +1,64 @@
 
-# Exencicio de Manipulação do DOM e Eventos com JQuery
+# app 
 
-Você deverá desenvolver **uma página web responsiva** utilizando **JavaScript com jQuery e Bootstrap 4**, cujo objetivo é **listar e filtrar naves do universo Star Wars**, consumindo dados da API pública disponível em:
-https://swapi.info/api/starships
+devo desenvolver uma aplicação, **Single Page Application (SPA)** que tenha tema **“Visite o Espaço”**.
 
-A página deverá, ao ser carregada, **buscar todas as naves via AJAX de baixo nível** ($.ajax) e renderizar dinamicamente no DOM **um card do Bootstrap 4 para cada nave**, exibindo informações relevantes (como nome, classe, fabricante, custo e capacidade de carga). Durante o carregamento inicial dos dados, deve ser exibido **um alert do Bootstrap** informando o estado de carregamento ao usuário, o qual deverá ser removido assim que os dados forem carregados e renderizados.
+## E Necessario a utilizar: 
+- Bootstrap 5 
+- jQuery para: 
+    Navegação interna
+    Manipulação de DOM
+    eventos e consumo de API
+    AJAX de baixo nível ($.ajax)
 
-Além da listagem, a página deverá conter um **modal de filtros**, também construído com Bootstrap 4, que permita ao usuário aplicar os seguintes critérios sobre a lista já carregada no frontend (não é permitido refazer a requisição para filtrar):
+- API a ser consumida: 
+    https://swapi.info/api/planets/
 
-- Classe: Select com todas as opções distintas de starship_class retornadas pela API
+## Descrição da layout da aplicação:
 
-- Custo: Dois inputs numéricos (Inicial e Final), baseados no atributo cost_in_credits
+A aplicação deverá possuir um **menu superior fixo (Navbar) contendo os itens Início, Sobre, Destinos e Contato**, e a navegação entre essas seções deverá ocorrer sem recarregamento de página, **caracterizando o comportamento de uma (SPA)**. A troca de “páginas” deve ser feita por **manipulação dinâmica do DOM via jQuery**, controlada por eventos de clique no menu **(Navbar)**.
 
-- Capacidade de Carga: Dois inputs numéricos (Inicial e Final), baseados no atributo cargo_capacity
+### A estrutura funcional da aplicação deve atender aos seguintes requisitos:
 
-- Nome: Input de texto para filtrar naves cujo atributo name contenha o texto informado
+- Página Inicial (Início)
+Deve conter um **banner principal (hero section/Header) abaixo do NAvebar** com chamada temática relacionada a viagens espaciais e um texto descritivo. Os textos podem ser **hardcoded** e gerados a partir do **Mussum Ipsum**,([o melhor lorem ipsum do mundis](https://mussumipsum.com/)).
 
-- Fabricante: Input de texto para filtrar naves cujo atributo manufacturer contenha o texto informado
+- Página Sobre
+Deve apresentar um texto institucional sobre a proposta fictícia da empresa de turismo espacial, também com conteúdo **hardcoded** e gerados a partir do **Mussum Ipsum**,([o melhor lorem ipsum do mundis](https://mussumipsum.com/)).
+      
+- Página Destinos
+Deve consumir a API pública:
+**https://swapi.info/api/planets/**
+Os planetas devem ser carregados via **AJAX de baixo nível ($.ajax)** e exibidos dinamicamente no DOM, preferencialmente em cards do **Bootstrap 5**, contendo informações relevantes do planeta (nome, clima, terreno, população, etc.).
+Enquanto os dados estiverem sendo carregados, deve ser exibido um **alert do Bootstrap** indicando o estado de carregamento. Após o carregamento, o alerta deve ser removido.
 
-**Comportamento esperado:**
+- Página Contato
+Deve conter um formulário de contato funcional, implementado com jQuery, contendo:
 
+    Nome
+    E-mail
+    Assunto
+    Mensagem
+    O formulário deve possuir:
+        Validação de campos obrigatórios
+        Validação básica de e-mail
+        Feedback visual ao usuário (sucesso, erro, loading) usando componentes do Bootstrap 4
+        Simulação de envio (não é necessário backend)
 
+## Requisitos técnicos obrigatórios da aplicação:
 
-- Ao carregar a página, todas as naves devem ser exibidas em cards (https://getbootstrap.com/docs/4.6/components/card/).
+- Aplicação no formato **(SPA)**, sem reload de página
 
-- Enquanto as naves são carregadas, deve ser dado um feedback visual de carregamento usando componente alert (https://getbootstrap.com/docs/4.6/components/alerts/) do Bootstrap
+- Layout responsivo utilizando **Bootstrap 5**
 
-- Ao aplicar os filtros, o modal deve ser fechado automáticamente. As naves que não se enquadrarem nos critérios devem ser ocultadas via manipulação de DOM, sem recarregar a página.
+- Consumo de API e requisições **exclusivamente com $.ajax**
 
-- Caso nenhum filtro esteja preenchido, todas as naves devem ser exibidas novamente.
+- Todos os eventos devem ser manipulados via **jQuery**
 
-- A aplicação deve funcionar corretamente em resoluções desktop e mobile.
+- Toda a manipulação do DOM deve ser feita **exclusivamente com jQuery**
 
-**Regras obrigatórias do teste:**
+- Não é permitido o uso de frameworks JS modernos ou APIs nativas de DOM diretamente
 
-- O consumo da API deve ser feito exclusivamente com $.ajax.
-
-- Todos os eventos (clique, submit, change, etc.) devem ser manipulados via jQuery.
-
-- Toda a manipulação do DOM (criação de cards, exibição/ocultação, leitura de inputs, atualização de classes e atributos) deve ser feita exclusivamente com jQuery.
-
-- Não é permitido o uso de fetch, frameworks JS ou manipulação direta de DOM via APIs nativas (document.querySelector, etc.).
+- Código organizado, legível e com separação básica de responsabilidades
 
 
