@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Star Wars App - AngularJS</title>
+
+    <!-- 1. CSS: Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    
+    <!-- Opcional: Seu CSS global -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+</head>
+<body>
+
+    <!-- 
+      2. Componente Principal (Home) 
+      Como estamos usando arquitetura de componentes, 
+      evitamos usar ng-controller diretamente aqui.
+      O <home-component> será renderizado pelo router ou diretamente.
+    -->
+    <home-component></home-component>
+
+    <!-- 3. Bibliotecas (Vendor) - Ordem Importa! -->
+    <!-- jQuery (Necessário para Bootstrap 4) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AngularJS e Dependências -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <!-- Se for usar rotas (opcional, mas recomendado) -->
+    <script src="https://unpkg.com/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+
+    <!-- 4. Aplicação (Seus Arquivos) -->
+    <!-- Módulos Principais -->
+    <script src="app/app.module.js"></script>
+    <script src="app/app.config.js"></script>
+    <script src="app/core/core.module.js"></script>
+    <script src="app/shared/shared.module.js"></script>
+
+    <!-- Services -->
+    <script src="app/core/services/api.service.js"></script>
+
+    <!-- Diretivas -->
+    <script src="app/shared/directives/class-select.directive.js"></script>
+
+    <!-- Componentes Compartilhados -->
+    <script src="app/shared/starship-card/starship-card.component.js"></script>
+    <script src="app/shared/filter-modal/filter-modal.component.js"></script>
+
+    <!-- Módulos de Funcionalidade (Home) -->
+    <script src="app/modules/home/home.module.js"></script>
+    <script src="app/modules/home/home.component.js"></script>
+
+</body>
+</html>

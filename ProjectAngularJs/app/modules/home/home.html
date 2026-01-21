@@ -1,0 +1,14 @@
+<div class="container mt-5">
+    <h1>{{ $ctrl.title }}</h1>
+
+    <div ng-if="$ctrl.isLoading" class="alert alert-info">
+        Carregando naves...
+    </div>
+
+    <div class="row">
+        <div class="col-md-4" ng-repeat="starship in $ctrl.starships">
+            <starship-card nave="starship"></starship-card>
+        </div>
+    </div>
+</div>
+
