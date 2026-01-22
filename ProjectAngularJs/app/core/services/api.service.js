@@ -9,7 +9,7 @@
                 var deferred = $q.defer();
                 $http.get('https://swapi.info/api/starships')
                     .then(function(response){
-                        deferred.resolve(response.data.results);
+                        deferred.resolve(response.data);
                     })
                     .catch(function(error){
                         deferred.reject(error);
