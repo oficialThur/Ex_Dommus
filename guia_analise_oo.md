@@ -3,7 +3,7 @@
 
 ---
 
-## 📚 ETAPA 1: COMPREENSÃO DO DOMÍNIO E LEVANTAMENTO DE REQUISITOS
+## ETAPA 1: COMPREENSÃO DO DOMÍNIO E LEVANTAMENTO DE REQUISITOS
 
 ### O que é Modelo de Domínio?
 Segundo o DDD (Domain-Driven Design), o modelo de domínio é **a representação dos conceitos do negócio** e suas relações. É o "coração do software" - se você não entender o domínio (negócio), o software não resolverá os problemas reais.
@@ -75,7 +75,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-## 🔍 ETAPA 2: ANÁLISE TEXTUAL E EXTRAÇÃO DE CASOS DE USO
+## ETAPA 2: ANÁLISE TEXTUAL E EXTRAÇÃO DE CASOS DE USO
 
 ### 2.1 Técnica de Análise Textual
 
@@ -172,7 +172,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-## 🏗️ ETAPA 3: DERIVAÇÃO DAS CLASSES COM COESÃO E BAIXO ACOPLAMENTO
+## ETAPA 3: DERIVAÇÃO DAS CLASSES COM COESÃO E BAIXO ACOPLAMENTO
 
 ### 3.1 Conceitos Importantes
 
@@ -277,7 +277,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-## 🏛️ ETAPA 4: ORGANIZAÇÃO NO PADRÃO MVC
+## ETAPA 4: ORGANIZAÇÃO NO PADRÃO MVC
 
 ### 4.1 O que é MVC?
 
@@ -288,7 +288,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ### 4.2 Separação das Classes no MVC
 
-#### 📊 MODEL (Camada de Negócio/Dados)
+#### MODEL (Camada de Negócio/Dados)
 
 **Classes de Domínio:**
 - `Cliente`
@@ -313,7 +313,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-#### 🎨 VIEW (Camada de Apresentação)
+#### VIEW (Camada de Apresentação)
 
 **Telas/Formulários:**
 - `FormCadastroCliente`
@@ -329,7 +329,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-#### 🎮 CONTROLLER (Camada de Controle)
+#### CONTROLLER (Camada de Controle)
 
 **Controllers:**
 - `ClienteController`
@@ -398,39 +398,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-## 📝 RESUMO DAS ETAPAS
-
-### ✅ Checklist do Exercício
-
-**ETAPA 1 - Requisitos:**
-- [ ] Descrição do domínio
-- [ ] Requisitos Funcionais listados
-- [ ] Requisitos Não-Funcionais listados
-- [ ] Elementos principais identificados
-
-**ETAPA 2 - Casos de Uso:**
-- [ ] Análise textual realizada
-- [ ] Atores identificados
-- [ ] Casos de uso escritos com fluxos
-- [ ] Extensões documentadas
-
-**ETAPA 3 - Classes:**
-- [ ] Classes derivadas da análise
-- [ ] Atributos definidos
-- [ ] Métodos essenciais listados
-- [ ] Coesão verificada
-- [ ] Acoplamento minimizado
-
-**ETAPA 4 - MVC:**
-- [ ] Classes organizadas em Model
-- [ ] Views identificadas
-- [ ] Controllers definidos
-- [ ] Responsabilidades separadas
-- [ ] Diagrama de classes criado
-
----
-
-## 🎯 DICAS FINAIS
+## DICAS FINAIS
 
 1. **Linguagem Ubíqua:** Use sempre os mesmos termos (ex: "Cliente" e não "Usuário" ou "Locatário")
 
@@ -444,7 +412,7 @@ A Imobiliária Dommus trabalha como intermediária entre proprietários de imóv
 
 ---
 
-## 📚 Referências Aplicadas
+## Referências Aplicadas
 
 - **Modelo de Domínio:** Linguagem ubíqua, foco no negócio
 - **Engenharia de Requisitos:** Funcionais vs Não-Funcionais
