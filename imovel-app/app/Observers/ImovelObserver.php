@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Observers;
+namespace App\Observers;  
 
-use App\Models\Imovel;
+use App\Models\Imovel;  
 use Illuminate\Support\Facades\Log;
 
 class ImovelObserver
@@ -71,19 +71,55 @@ class ImovelObserver
         ]);
     }
 
+    public function updating(Imovel $imovel): bool
+    {
+        if ($imovel->isDirty('preco')) {
+            if ($imovel->disponibilidade !== 'DISPONIVEL') {
+                Log::warning("Tentativa de alterar preço de imóvel não disponível", [
+                    'id' => $imovel->id,
+                    'disponibilidade' => $imovel->disponibilidade,
+                    'preco_atual' => $imovel->getOriginal('preco'),
+                    'preco_tentado' => $imovel->preco
+                ]);
+
+                throw new \DomainException(
+                    'Não é permitido alterar o preço de um imóvel que não esteja DISPONÍVEL. ' .
+                    'Status atual: ' . $imovel->disponibilidade
+                );
+            }
+        }
+
+        // Regra para Soft Delete Manual (alteração do campo ativo para false)
+        if ($imovel->isDirty('ativo') && $imovel->ativo === false) {
+            if ($imovel->disponibilidade !== 'DISPONIVEL') {
+                Log::warning("Tentativa de exclusão (soft delete) de imóvel não disponível", [
+                    'id' => $imovel->id,
+                    'disponibilidade' => $imovel->disponibilidade
+                ]);
+
+                throw new \DomainException(
+                    'Não é permitido excluir um imóvel que não esteja DISPONÍVEL. Status atual: ' . $imovel->disponibilidade
+                );
+            }
+        }
+
+        return true;
+    }
+
+
     public function updated(Imovel $imovel): void
     {
-        if($imovel->wasChanged('preco')){
-            $precoAntingo = $imovel->getOriginal('preco');
-            $precoAtual = $imovel->get('preco');
-            $diferenca = $precoAtual - $precoAntingo;
-            $perecentual = (($diferenca / $precoAntingo) * 100);
+        if ($imovel->wasChanged('preco')) {
+            $precoAntigo = $imovel->getOriginal('preco');
+            $precoAtual = $imovel->preco;
+            $diferenca = $precoAtual - $precoAntigo;
+            $percentual = (($diferenca / $precoAntigo) * 100);
 
             Log::info("Preço do imóvel #{$imovel->id} foi alterado", [
-                'preco_anterior' => number_format($precoAntingo, 2, ',', '.'),
+                'preco_anterior' => number_format($precoAntigo, 2, ',', '.'),
                 'preco_novo' => number_format($precoAtual, 2, ',', '.'),
                 'diferenca' => number_format($diferenca, 2, ',', '.'),
-                'percentual' => round($perecentual, 2) . '%'   
+                'percentual' => round($percentual, 2) . '%'   
             ]);
         }
 
@@ -161,36 +197,71 @@ class ImovelObserver
         }
     }
 
-    /**
-     * Handle the Imovel "deleted" event.
-     *
-     * @param  \App\Models\Imovel  $imovel
-     * @return void
-     */
-    public function deleted(Imovel $imovel)
+    public function deleting(Imovel $imovel): bool
     {
-        //
+        if ($imovel->disponibilidade !== 'DISPONIVEL') {
+            Log::warning("Tentativa de exclusão de imóvel não disponível", [
+                'id' => $imovel->id,
+                'disponibilidade' => $imovel->disponibilidade,
+                'descricao' => $imovel->descricao
+            ]);
+
+            throw new \DomainException(
+                'Não é permitido excluir um imóvel que não esteja DISPONÍVEL. ' .
+                'Status atual: ' . $imovel->disponibilidade
+            );
+        }
+        return true;
     }
 
-    /**
-     * Handle the Imovel "restored" event.
-     *
-     * @param  \App\Models\Imovel  $imovel
-     * @return void
-     */
-    public function restored(Imovel $imovel)
+    public function deleted(Imovel $imovel): void
     {
-        //
+        Log::warning("Imóvel excluído do sistema", [
+            'id' => $imovel->id,
+            'descricao' => $imovel->descricao,
+            'preco_original' => number_format($imovel->preco, 2, ',', '.'),
+            'disponibilidade' => $imovel->disponibilidade,
+            'data_exclusao' => \Carbon\Carbon::now()->format('d/m/Y H:i:s')
+        ]);
+
+        if ($imovel->preco >= 500000) {
+            Log::critical("ALERTA: Imóvel de alto valor foi excluído!", [
+                'id' => $imovel->id,
+                'preco' => 'R$ ' . number_format($imovel->preco, 2, ',', '.'),
+            ]);
+        }
     }
 
-    /**
-     * Handle the Imovel "force deleted" event.
-     *
-     * @param  \App\Models\Imovel  $imovel
-     * @return void
-     */
-    public function forceDeleted(Imovel $imovel)
+    public function restored(Imovel $imovel): void
     {
-        //
+        Log::info("Imovel RESTAURADO no sistema", [
+            'id' => $imovel->id,
+            'descricao' => $imovel->descricao,
+            'preco' => number_format($imovel->preco, 2, ',', '.'),
+            'data_restauracao' => \Carbon\Carbon::now()->format('d/m/Y H:i:s')
+        ]);
     }
+
+ 
+    public function saving(Imovel $imovel): bool
+    {
+        if ($imovel->preco < 0){
+            throw new \DomainException('O preço do imovel não pode ser negativo');
+        }
+
+        if ($imovel->preco < 1000 && $imovel->preco > 0){
+            Log::warning("Imovel com preço muito baixo detectado", [
+                'id' => $imovel->id ?? 'novo',
+                'preco' => $imovel->preco
+            ]);
+        }
+
+        return true;
+    }
+
+    public function saved(Imovel $imovel): void
+    {
+        Log::info("Imovel #{$imovel->id} foi salvo no sistema"); 
+    }
+
 }

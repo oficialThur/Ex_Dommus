@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('imovels', function (Blueprint $table): void
+        Schema::create('imoveis', function (Blueprint $table): void 
         {
             $table->id();
             $table->string('descricao', 255);
@@ -16,12 +16,11 @@ return new class extends Migration
             $table->enum('disponibilidade', ['DISPONIVEL', 'VENDIDO']);
             $table->boolean('ativo')->default(true);
             $table->timestamps();
-
         });
     }    
 
     public function down(): void
     {
-        Schema::dropIfExists('imovels');
+        Schema::dropIfExists('imoveis'); 
     }
 };

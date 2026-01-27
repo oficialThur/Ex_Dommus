@@ -207,3 +207,348 @@ preco_novo = preco_atual + (preco_atual × percentual / 100)
     Gerar o conteúdo do CSV dinamicamente durante o streaming
 
 - A resposta deve respeitar a **autorização básica** da aplicação.
+
+
+📋 DIVISÃO DO EXERCÍCIO EM ETAPAS
+ETAPA 1: Configuração Inicial do Projeto
+Passos:
+
+Instalar o Lumen via Composer
+
+bash   composer create-project --prefer-dist laravel/lumen imovel-app
+   cd imovel-app
+```
+
+2. Configurar o arquivo `.env`
+   - Copiar `.env.example` para `.env`
+   - Configurar credenciais do banco de dados
+   - Adicionar variáveis para Basic Auth:
+```
+     API_USERNAME=admin
+     API_PASSWORD=secret123
+
+Habilitar features no bootstrap/app.php
+
+Descomentar $app->withFacades()
+Descomentar $app->withEloquent()
+Registrar providers necessários
+
+
+Testar se o servidor sobe corretamente
+
+bash   php -S localhost:8000 -t public
+
+ETAPA 2: Banco de Dados - Migration e Model
+Passos:
+
+Criar a migration da tabela imoveis
+
+bash   php artisan make:migration create_imoveis_table
+
+Definir a estrutura da tabela na migration:
+
+id (bigIncrements)
+descricao (string, 255)
+preco (decimal, 10, 2)
+disponibilidade (enum: 'DISPONIVEL', 'VENDIDO')
+ativo (boolean, default true)
+timestamps
+
+
+Executar a migration
+
+bash   php artisan migrate
+
+Criar o Model Imovel em app/Models/Imovel.php:
+
+Definir $table = 'imoveis'
+Definir $fillable (descricao, preco, disponibilidade, ativo)
+Definir $hidden (ativo, created_at, updated_at)
+Definir $casts (preco como decimal, ativo como boolean)
+
+ETAPA 3: Implementar Soft Delete Manual
+Passos:
+
+Adicionar Query Scope no Model Imovel:
+
+Criar scopeAtivos() que filtra apenas ativo = true
+
+
+Criar método customizado de exclusão:
+
+Sobrescrever ou criar método softDelete() que marca ativo = false
+
+
+Aplicar o scope globalmente (opcional):
+
+Criar Global Scope para sempre filtrar apenas ativos nas queries
+
+ETAPA 4: Observer para Regras de Negócio
+Passos:
+
+Criar o Observer ImovelObserver
+
+bash   php artisan make:observer ImovelObserver --model=Imovel
+
+Implementar regra no método updating():
+
+Verificar se o preço está sendo alterado
+Se sim, verificar se disponibilidade == 'DISPONIVEL'
+Se não estiver disponível, retornar false ou lançar exceção
+
+
+Implementar regra no método deleting():
+
+Verificar se disponibilidade == 'DISPONIVEL'
+Se não estiver disponível, retornar false ou lançar exceção
+
+
+Registrar o Observer no AppServiceProvider ou EventServiceProvider:
+
+php   Imovel::observe(ImovelObserver::class);
+
+ETAPA 5: Service e Interface para Reajuste de Preço
+Passos:
+
+Criar a interface app/Contracts/ReajustePrecoInterface.php:
+
+php   interface ReajustePrecoInterface {
+       public function aplicarReajuste(array $imoveis, float $percentual): int;
+   }
+
+Criar o serviço app/Services/UnidadeService.php:
+
+Implementar ReajustePrecoInterface
+Criar método aplicarReajuste() com a lógica:
+
+Filtrar imóveis com disponibilidade DISPONIVEL
+Aplicar fórmula: preco_novo = preco_atual + (preco_atual × percentual / 100)
+Persistir alterações
+Retornar quantidade de imóveis reajustados
+
+
+
+
+Registrar no Service Container (AppServiceProvider):
+
+php   $this->app->bind(
+       \App\Contracts\ReajustePrecoInterface::class,
+       \App\Services\UnidadeService::class
+   );
+
+ETAPA 6: JSON Resources
+Passos:
+
+Criar app/Http/Resources/ImovelResource.php:
+
+Definir estrutura de retorno (id, descricao, preco, disponibilidade)
+Não expor o campo ativo
+
+
+Criar app/Http/Resources/ImovelCollection.php:
+
+Adicionar metadados: quantidade total e somatório de preços
+Estruturar paginação
+
+
+Testar se as resources estão formatando corretamente
+
+
+ETAPA 7: Middleware de Autenticação Basic Auth
+Passos:
+
+Criar middleware app/Http/Middleware/BasicAuthMiddleware.php:
+
+Extrair header Authorization
+Decodificar Base64
+Comparar com credenciais do .env
+Retornar 401 se inválido
+
+
+Registrar o middleware no bootstrap/app.php:
+
+php   $app->routeMiddleware([
+       'auth.basic' => App\Http\Middleware\BasicAuthMiddleware::class,
+   ]);
+
+Aplicar o middleware nas rotas
+
+
+ETAPA 8: Validação de Requisições
+Passos:
+
+Criar classes de validação ou usar validação inline:
+
+StoreImovelRequest - validações para criação
+UpdateImovelRequest - validações para atualização
+ReajusteRequest - validação do percentual
+
+
+Definir regras:
+
+descricao: required, string, max:255
+preco: required, numeric, min:0
+disponibilidade: required, in:DISPONIVEL,VENDIDO
+percentual: required, numeric, gt:0
+
+
+
+
+ETAPA 9: Controller e Rotas CRUD
+Passos:
+
+Criar app/Http/Controllers/ImovelController.php
+Implementar métodos:
+
+index() - Listar com paginação, filtros, totais
+store() - Criar imóvel
+show() - Exibir um imóvel
+update() - Atualizar imóvel
+destroy() - Soft delete
+
+
+Implementar filtros no index():
+
+Query params: preco_min, preco_max, disponibilidade
+Aplicar filtros usando Query Builder
+
+
+Calcular metadados:
+
+Quantidade total de imóveis
+Somatório de preços
+
+
+Definir rotas em routes/web.php:
+
+php   $router->group(['prefix' => 'api', 'middleware' => 'auth.basic'], function () use ($router) {
+       $router->get('imoveis', 'ImovelController@index');
+       $router->post('imoveis', 'ImovelController@store');
+       $router->get('imoveis/{id}', 'ImovelController@show');
+       $router->put('imoveis/{id}', 'ImovelController@update');
+       $router->delete('imoveis/{id}', 'ImovelController@destroy');
+   });
+
+ETAPA 10: Endpoint de Reajuste em Massa
+Passos:
+
+Adicionar método reajusteEmMassa() no ImovelController
+Injetar ReajustePrecoInterface no controller via construtor
+Implementar lógica:
+
+Receber percentual via request
+Validar percentual (deve ser positivo)
+Buscar imóveis ativos com filtros aplicados (mesma lógica do index)
+Chamar serviço de reajuste
+Retornar quantidade de imóveis reajustados
+
+
+Adicionar rota:
+
+php   $router->post('imoveis/reajuste', 'ImovelController@reajusteEmMassa');
+
+ETAPA 11: Exportação CSV com Streamed Response
+Passos:
+
+Criar método exportarCsv() no ImovelController
+Implementar lógica:
+
+Buscar todos os imóveis ativos (sem filtros, sem paginação)
+Usar StreamedResponse
+Gerar CSV linha por linha:
+
+Header: ID, Descrição, Preço, Disponibilidade
+Dados: iterar sobre imóveis e escrever no stream
+
+
+
+
+Configurar headers HTTP:
+
+php   'Content-Type' => 'text/csv',
+   'Content-Disposition' => 'attachment; filename="imoveis.csv"'
+
+Adicionar rota:
+
+php   $router->get('imoveis/exportar', 'ImovelController@exportarCsv');
+
+ETAPA 12: Testes e Refinamentos
+Passos:
+
+Testar todos os endpoints com ferramentas (Postman, Insomnia, curl):
+
+Listar imóveis
+Filtrar por preço e disponibilidade
+Criar imóvel
+Atualizar imóvel (testar regra do Observer)
+Excluir imóvel (testar regra do Observer)
+Reajuste em massa
+Exportar CSV
+
+
+Validar autenticação Basic Auth:
+
+Testar com credenciais corretas
+Testar com credenciais incorretas
+Testar sem header Authorization
+
+
+Validar regras de negócio:
+
+Tentar alterar preço de imóvel VENDIDO (deve falhar)
+Tentar excluir imóvel VENDIDO (deve falhar)
+Verificar se soft delete funciona corretamente
+
+
+Validar JSON Resources:
+
+Campo ativo não deve aparecer nas respostas
+Metadados (quantidade e somatório) devem estar corretos
+
+
+Validar exportação CSV:
+
+Arquivo deve baixar corretamente
+Conteúdo deve estar formatado
+Grandes volumes devem ser eficientes (testar com seed de muitos registros)
+
+
+
+
+ETAPA 13: Documentação e Finalização
+Passos:
+
+Criar/atualizar README.md do projeto com:
+
+Instruções de instalação
+Configuração do .env
+Como rodar migrations
+Exemplos de uso dos endpoints
+
+
+Adicionar collection do Postman/Insomnia (opcional)
+Revisar código:
+
+Nomenclaturas consistentes
+Comentários onde necessário
+Remover código desnecessário
+
+
+Commit final e organização do repositório
+
+
+🎯 Resumo das Etapas
+
+✅ Configuração Inicial
+✅ Migration e Model
+✅ Soft Delete Manual
+✅ Observer
+✅ Service e Interface
+✅ JSON Resources
+✅ Basic Auth Middleware
+✅ Validação
+✅ Controller e Rotas CRUD
+✅ Reajuste em Massa
+✅ Exportação CSV
+✅ Testes
+✅ Documentação

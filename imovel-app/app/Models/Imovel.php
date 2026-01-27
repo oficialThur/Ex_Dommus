@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-
 class Imovel extends Model
 {
-    protected $table = 'imovels';
-
+    protected $table = 'imoveis'; 
     protected $fillable = [
         'descricao', 
         'preco', 
@@ -36,12 +34,13 @@ class Imovel extends Model
     public function softDelete(): bool
     {
         $this->ativo = false;
-        return true;    
+        return $this->save();    
     }
 
     public function restore(): bool
     {
-        return $this->ativo === false;
+        $this->ativo = true;  
+        return $this->save();
     }
 
     protected static function booted()

@@ -3,16 +3,24 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Imovel;
+use App\Observers\ImovelObserver;
+use App\Contracts\ReajustePrecoInterface;
+use App\Services\UnidadeService;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+
+    public function register(): void
     {
-        //
+        $this->app->bind(
+            ReajustePrecoInterface::class,
+            UnidadeService::class
+        );           
+    }
+
+    public function boot()
+    {
+        Imovel::observe(ImovelObserver::class);
     }
 }
