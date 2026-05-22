@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Carregar Planetas - Star Wars API</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🪐 Planetas do Universo Star Wars</h1>
+
+        <div class="controls">
+            <div class="input-group">
+                <label for="minPopulacao">População Mínima:</label>
+                <input type="number" id="minPopulacao" min="0" placeholder="Informe a população mínima">
+            </div>
+            <button id="btnCarregarPlanetas" type="button">Carregar Planetas</button>
+        </div>
+
+        <table id="tabelaPlanetas">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Terreno</th>
+                    <th>População</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="scripts/carregar-planetas.js"></script>
+</body>
+
+</html>

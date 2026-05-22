@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Bootstrap 4</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body class="bg-dark text-light d-flex justify-content-center align-items-center flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg w-100">
+        <div class="container-fluid">
+            <a class=" navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item gap-3">
+                        <a class="nav-link" href="#table1">table1</a>
+                    </li>
+                    <li class="nav-item gap-3">
+                        <a class="nav-link" href="#table2">table2</a>
+                    </li>
+                    <li class="nav-item gap-3">
+                        <a class="nav-link" href="#cadastrar">cadastrar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="d-flex justify-content-center align-items-center min-vh-100 gap-4 max-w-4xl flex-wrap">
+        <div class="container-fluid col">
+            <table class="table" id="table1">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Usuário 1</td>
+                        <td>user1@email.com</td>
+                        <td>Ativo</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Usuário 2</td>
+                        <td>user2@email.com</td>
+                        <td>Ativo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Usuário 3</td>
+                        <td>user3@email.com</td>
+                        <td>Inativo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container-fluid col d-flex justify-content-center align-items-center flex-column ">
+
+            <table class="table" id="table2">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Usuário 1</td>
+                        <td>user1@email.com</td>
+                        <td>Ativo</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Usuário 2</td>
+                        <td>user2@email.com</td>
+                        <td>Ativo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Usuário 3</td>
+                        <td>user3@email.com</td>
+                        <td>Inativo</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modal" id="cadastrar">
+                cadastrar
+            </button>
+
+            <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro de Usuário</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="InputName" class="form-label">Nome</label>
+                                    <input type="name" class="form-control" id="InputName" aria-describedby="emailHelp">
+                                    <div id="emailHelp" class="form-text">Como devemos te chamar?
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="InputEmail1" class="form-label">Email </label>
+                                    <input type="email" class="form-control" id="InputEmail1"
+                                        aria-describedby="emailHelp">
+                                    <div id="emailHelp" class="form-text">infome seu email.
+                                    </div>
+                                </div>
+                                <section class="container-fluid d-flex gap-3">
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="Check1">
+                                        <label class="form-check-label" for="Check1">Ativo</label>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="Check2">
+                                        <label class="form-check-label" for="Check2">Inativo</label>
+                                    </div>
+                                </section>
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>
