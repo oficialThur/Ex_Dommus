@@ -1,7 +1,0 @@
-FROM php:8.2-fpm
-
-# É uma boa prática instalar dependências do sistema e extensões PHP em um único comando RUN
-# para reduzir o número de camadas na imagem.
-RUN docker-php-ext-install pdo pdo_mysql mysqli
-
-WORKDIR /var/www/html
