@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Laravel
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+
+# Build outputs
+/build
+/dist
+/coverage
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Claude Code
+.claude/
